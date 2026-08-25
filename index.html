@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego: Atrapa el Cuadro</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #1a1a1a;
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        #interfaz {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        #objetivo {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-color: #ff4757;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 0 15px #ff4757;
+            /* Animación CSS para que parpadee y flote */
+            animation: latido 0.5s infinite alternate;
+        }
+
+        @keyframes latido {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="interfaz">Puntos: <span id="puntuacion">0</span></div>
+    <div id="objetivo"></div>
+
+    <script>
+        const objetivo = document.getElementById('objetivo');
+        const puntuacionTxt = document.getElementById('puntuacion');
+        let puntos = 0;
+
+        function moverObjetivo() {
+            // Calcular posiciones aleatorias restando el tamaño del cuadro
+            const maxX = window.innerWidth - 60;
+            const maxY = window.innerHeight - 60;
+
+            const aleatorioX = Math.floor(Math.random() * maxX);
+            const aleatorioY = Math.floor(Math.random() * maxY);
+
+            objetivo.style.left = aleatorioX + 'px';
+            objetivo.style.top = aleatorioY + 'px';
+        }
+
+        // Evento al hacer clic en el cuadro
+        objetivo.addEventListener('click', () => {
+            puntos++;
+            puntuacionTxt.textContent = puntos;
+            moverObjetivo();
+            
+            // Reiniciar el temporizador para que no se mueva inmediatamente
+            clearInterval(temporizador);
+            temporizador = setInterval(moverObjetivo, 1000);
+        });
+
+        // Mover el cuadro automáticamente cada 1 segundo (1000ms) si no lo atrapas
+        let temporizador = setInterval(moverObjetivo, 1000);
+
+        // Posición inicial
+        moverObjetivo();
+    </script>
+
+</body>
+</html>
